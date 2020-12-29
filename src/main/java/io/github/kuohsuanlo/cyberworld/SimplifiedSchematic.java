@@ -4,8 +4,7 @@ package io.github.kuohsuanlo.cyberworld;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.Vector2D;
-import com.sk89q.worldedit.blocks.BlockData;
-
+import org.bukkit.Material;
 
 
 public class SimplifiedSchematic {
@@ -110,7 +109,7 @@ public class SimplifiedSchematic {
        return size.getBlockY();
    }
 
-   public int getBlockId(int x, int y,int z){
+   public Material getBlockId(int x, int y, int z){
 
 	   return blocks_id[x][y][z];
 	   

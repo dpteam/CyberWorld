@@ -1,47 +1,25 @@
 package io.github.kuohsuanlo.cyberworld;
 
-import static java.lang.System.arraycopy;
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.generator.ChunkGenerator.BiomeGrid;
+import org.bukkit.generator.ChunkGenerator.ChunkData;
+import org.bukkit.material.MaterialData;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
-import org.bukkit.block.Block;
-import org.bukkit.generator.ChunkGenerator.BiomeGrid;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
-import org.bukkit.Material.MaterialData;
-import org.bukkit.Material.Wool;
+import static org.bukkit.Material.*;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.EditSessionFactory;
-import com.sk89q.worldedit.LocalWorld;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.blocks.BaseBlock;
-import com.sk89q.worldedit.bukkit.BukkitUtil;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.schematic.SchematicFormat;
-import com.sk89q.worldedit.world.DataException;
-
+//import org.bukkit.Material.MaterialData;
+//import org.bukkit.Material.Wool;
 
 public class CyberWorldObjectGenerator{
     private CyberWorld plugin;
@@ -62,10 +40,7 @@ public class CyberWorldObjectGenerator{
 	private static final int[] FENCE_LIST = {85,113,188,189,190,191,192};
 	private static final int[] BLOCKS_LIST = {1,4,5,17,24,43,45,82,87,88,98,121,125,155,162,168,172,179,181,201,202,204,206};
 	private static final int[] BLOCKS_DMAX = {7,1,6, 4, 3, 8, 1, 1, 1, 1, 4,  1,  6,  3,  2,  3,  1,  3,  1,  1,  1,  1,  1};
-	
-  
-    
-    
+
 	public CyberWorldObjectGenerator(CyberWorld p, int biome_numbers, CyberWorldBiomeGenerator b, CityStreetGenerator c){
 		plugin = p;
 		rng = new Random();
@@ -109,14 +84,14 @@ public class CyberWorldObjectGenerator{
     public final static int MAX_MOST_MATERIAL =5;
     
 	//Paving Roads
-    private static Material ROAD_SIDEWALK_MATERIAL_1 = Material.LEGACY_STEP;
-    private static Material HIGHWAY_MATERIAL = Material.LEGACY_QUARTZ_BLOCK;
-    private static MaterialData ROAD_MATERIAL = new MaterialData(Material.LEGACY_STAINED_CLAY.getId(),(byte)0x9);
-    private static MaterialData ROAD_OUTSIDE_MATERIAL = new MaterialData(Material.LEGACY_STONE);
+    private static Material ROAD_SIDEWALK_MATERIAL_1 = LEGACY_STEP;
+    private static Material HIGHWAY_MATERIAL = LEGACY_QUARTZ_BLOCK;
+    private static MaterialData ROAD_MATERIAL = new MaterialData(LEGACY_STAINED_CLAY,(byte)0x9);
+    private static MaterialData ROAD_OUTSIDE_MATERIAL = new MaterialData(LEGACY_STONE);
 
     //Paving High Roads
 
-    private static Material HIGHWAY_FENCE = Material.LEGACY_IRON_FENCE;
+    private static Material HIGHWAY_FENCE = LEGACY_IRON_FENCE;
     private static MaterialData HIGHWAY_TUBES_MATERIAL = null;
 	
 	private static int[] LAYER_WIDTH = {10,10,10};
@@ -470,10 +445,10 @@ public class CyberWorldObjectGenerator{
 	    		for(int z=0;z<16;z++){
 	    			//Paving Ground
 	    			if(y <1){
-	    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_BEDROCK);
+	    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_BEDROCK);
 		        	}
 	    			else if(y <3){
-	    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+	    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 		        	}
 	    		}
 	    	}
@@ -487,15 +462,16 @@ public class CyberWorldObjectGenerator{
 	    			//Paving Ground
 	    			if(biome_cc_list_citysurface.get(biome_number).size()>0){
 	    				if(y  == plugin.GROUND_LEVEL+2){
-		    				  int block_id = biome_cc_list_citysurface.get(biome_number).get(0).getBlockId(x,0,z);
+		    				  Material block_id;
+		    				  block_id = biome_cc_list_citysurface.get(biome_number).get(0).getBlockId(x,0,z);
 		    				  byte block_data =  biome_cc_list_citysurface.get(biome_number).get(0).getBlockData(x,0,z);
 		    				  chunkdata.setBlock(x, y, z,new MaterialData(block_id, block_data));
 		    			}
 		    			else if( y ==plugin.GROUND_LEVEL+1){
-		    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+		    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        	}
 		    			else if(y ==plugin.GROUND_LEVEL){
-		    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_DIRT);
+		    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_DIRT);
 			        	}
 	    			}
 	    			
@@ -553,26 +529,26 @@ public class CyberWorldObjectGenerator{
     			
     			if(cg.getRoadType(chkx,chkz)==CyberWorldObjectGenerator.DIR_EAST_WEST ){
         			if((z == 5  ||  z==10)  &&  (x%8==1  ||  x%8==2) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_STAINED_CLAY.getId(), (byte) 0x4 );
+        				chunkdata.setBlock(x, y, z, LEGACY_STAINED_CLAY);
         			}
         			else if((z == 5  ||  z==10)  &&  (x%8==3  ||  x%8==0) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_GLOWSTONE );
+        				chunkdata.setBlock(x, y, z, LEGACY_GLOWSTONE );
         			}
     			}
     			else if(cg.getRoadType(chkx,chkz)==CyberWorldObjectGenerator.DIR_NORTH_SOUTH ){
     				if((x == 5  ||  x==10)  &&  (z%8==1  ||  z%8==2) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_STAINED_CLAY.getId(), (byte) 0x4 );
+    					chunkdata.setBlock(x, y, z, LEGACY_STAINED_CLAY);
         			}
     				else if((x == 5  ||  x==10)    &&  (z%8==3  ||  z%8==0) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_GLOWSTONE );
+        				chunkdata.setBlock(x, y, z, LEGACY_GLOWSTONE );
         			}
     			}
     			else if(cg.getRoadType(chkx,chkz)==CyberWorldObjectGenerator.DIR_INTERSECTION ){
     				if((x ==4  ||  x==6  ||  x==9  ||  x==11)  &&  (z<3  ||  z>=13) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_QUARTZ_BLOCK);
+    					chunkdata.setBlock(x, y, z, LEGACY_QUARTZ_BLOCK);
         			}
     				else if((z ==4  || z==6  ||  z==9  ||  z==11)  &&  (x<3  || x>=13) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_QUARTZ_BLOCK);
+    					chunkdata.setBlock(x, y, z, LEGACY_QUARTZ_BLOCK);
         			}
     			}
     		}
@@ -612,8 +588,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if((z==1 &&  x==7)  ||  (z==14  && x==7)){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
     		}
@@ -627,8 +603,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if((x==1 &&  z==7)  ||  (x==14  && z==7)){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
 			}
@@ -645,10 +621,10 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
 
-    				chunkdata.setRegion(0,y,0,1,y+1,1,Material.LEGACY_AIR);
-    				chunkdata.setRegion(15,y,0,16,y+1,1,Material.LEGACY_AIR);
-    				chunkdata.setRegion(0,y,15,1,y+1,16,Material.LEGACY_AIR);
-    				chunkdata.setRegion(15,y,15,16,y+1,16,Material.LEGACY_AIR);
+    				chunkdata.setRegion(0,y,0,1,y+1,1, LEGACY_AIR);
+    				chunkdata.setRegion(15,y,0,16,y+1,1, LEGACY_AIR);
+    				chunkdata.setRegion(0,y,15,1,y+1,16, LEGACY_AIR);
+    				chunkdata.setRegion(15,y,15,16,y+1,16, LEGACY_AIR);
 	    		}
     		}
 		}
@@ -672,8 +648,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if((z==14  && x==7)){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
     		}
@@ -691,8 +667,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if(z==1 &&  x==7){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
     		}
@@ -710,8 +686,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if(x==1 &&  z==7){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
 			}
@@ -729,8 +705,8 @@ public class CyberWorldObjectGenerator{
         				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,ROAD_SIDEWALK_MATERIAL_1);
         			}
         			if(x==14  && z==7){
-        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1,Material.LEGACY_FENCE);
-        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1,Material.LEGACY_GLOWSTONE);
+        				chunkdata.setRegion(x,y,z,x+1,y+5,z+1, LEGACY_FENCE);
+        				chunkdata.setRegion(x,y+5,z,x+1,y+6,z+1, LEGACY_GLOWSTONE);
         			}
 	    		}
 			}
@@ -749,10 +725,10 @@ public class CyberWorldObjectGenerator{
 			for(int x=0;x<16;x++){
 	    		for(int z=0;z<16;z++){
         			if((z == 5  ||  z==10)  &&  (x%8==1  ||  x%8==2) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_STAINED_CLAY.getId(), (byte) 0x4 );
+        				chunkdata.setBlock(x, y, z, LEGACY_STAINED_CLAY);
         			}
         			else if((z == 5  ||  z==10)  &&  (x%8==3  ||  x%8==0) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_GLOWSTONE );
+        				chunkdata.setBlock(x, y, z, LEGACY_GLOWSTONE );
         			}
     			}
     		}
@@ -761,10 +737,10 @@ public class CyberWorldObjectGenerator{
 			for(int x=0;x<16;x++){
 	    		for(int z=0;z<16;z++){
     				if((x == 5  ||  x==10)  &&  (z%8==1  ||  z%8==2) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_STAINED_CLAY.getId(), (byte) 0x4 );
+    					chunkdata.setBlock(x, y, z, LEGACY_STAINED_CLAY);
         			}
     				else if((x == 5  ||  x==10)    &&  (z%8==3  ||  z%8==0) ){
-        				chunkdata.setBlock(x, y, z, Material.LEGACY_GLOWSTONE );
+        				chunkdata.setBlock(x, y, z, LEGACY_GLOWSTONE );
         			}
     			}
     		}
@@ -774,10 +750,10 @@ public class CyberWorldObjectGenerator{
 			for(int x=0;x<16;x++){
 	    		for(int z=0;z<16;z++){
     				if((x ==4  ||  x==6  ||  x==9  ||  x==11)  &&  (z<3  ||  z>=13) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_QUARTZ_BLOCK);
+    					chunkdata.setBlock(x, y, z, LEGACY_QUARTZ_BLOCK);
         			}
     				else if((z ==4  || z==6  ||  z==9  ||  z==11)  &&  (x<3  || x>=13) ){
-    					chunkdata.setBlock(x, y, z, Material.LEGACY_QUARTZ_BLOCK);
+    					chunkdata.setBlock(x, y, z, LEGACY_QUARTZ_BLOCK);
         			}
     			}
     		}
@@ -807,21 +783,21 @@ public class CyberWorldObjectGenerator{
 		        			//Ground 0 1 2 //sewer road// 13 14 15
 		        			if( y==2  && z>=5 && z<=9){
 		        				if(r>0.5)
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        				else
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		else if ( rt==CyberWorldObjectGenerator.DIR_NORTH_SOUTH ){ //ROAD
@@ -832,21 +808,21 @@ public class CyberWorldObjectGenerator{
 		        			//Ground 0 1 2 //sewer road// 13 14 15
 		        			if(y==2  && x>=5 && x<=9){
 		        				if(r>0.5)
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        				else
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		else if ( rt==CyberWorldObjectGenerator.DIR_INTERSECTION ){ //INTERSECTION
@@ -857,21 +833,21 @@ public class CyberWorldObjectGenerator{
 		        			//d = Math.max((d*Math.abs(z-7)/5),(d*Math.abs(x-7)/5));
 		        			if(y==2  && ((x>=5 && x<=9) || (z>=5 && z<=9))){
 		        				if(r>0.5)
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        				else
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		//Building Pillar
@@ -879,27 +855,27 @@ public class CyberWorldObjectGenerator{
 		        			
 		    				double d = 0;//rng.nextDouble();
 		        			if((x<0+pillar_width ||  x>15-pillar_width)  &&  (z<0+pillar_width ||  z>15-pillar_width)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_BRICK);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_BRICK);
 		        			}
 		        			else{
 			        			if(y>=plugin.GROUND_LEVEL-5){
 			        				if(d<=0.05){
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 				        			}
 				        			else if(d>0.05  &&  d<=0.1){
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 				        			}
 				        			else if(d>0.15  &&  d<=0.2){
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE_STAIRS);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE_STAIRS);
 				        			}
 				        			else if(d>0.2  &&  d<=0.25){
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLE_WALL);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLE_WALL);
 				        			}
 				        			else if(d>0.25  &&  d<=0.30){
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STEP);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STEP);
 				        			}
 				        			else{
-				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+				        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 				        			}
 			        			}
 			        			
@@ -919,28 +895,28 @@ public class CyberWorldObjectGenerator{
 		        					((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
 		        				
 		        				if(z==0  || z==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			//Outside the shell
 		        			else if(y>=3  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=sewer_pipe_width*sewer_pipe_width   ){
 		        				if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 			        			}
 		        			}
 
@@ -954,28 +930,28 @@ public class CyberWorldObjectGenerator{
 		        					((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
 		        				
 		        				if(x==0  || x==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			//Outside the shell
 		        			else if(y>=3  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=sewer_pipe_width*sewer_pipe_width   ){
 		        				if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 			        			}
 		        			}
 
@@ -989,54 +965,54 @@ public class CyberWorldObjectGenerator{
 		        					((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)) {
 		        				
 		        				if(z==0  || z==15  ||  x==0  ||  x ==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			
 		        			if(y>=3  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<sewer_pipe_width*sewer_pipe_width  && 
 		        					((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
 		        				if(z==0  || z==15  ||  x==0  ||  x ==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			
 		        			
 		        			//Remove 4 walls on intersection
 		        			if(((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		        			if(((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		        			
 		        			
@@ -1045,19 +1021,19 @@ public class CyberWorldObjectGenerator{
 		        					((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
 		        				
 		        				if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			
@@ -1066,19 +1042,19 @@ public class CyberWorldObjectGenerator{
 		        			if(y<=sewer_pipe_height-sewer_pipe_width  && ((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<sewer_pipe_width*sewer_pipe_width    ){
 		        				
 		        				if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 	    				}
@@ -1092,17 +1068,17 @@ public class CyberWorldObjectGenerator{
 	    				//double d = rng.nextDouble();
 	        			if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<sewer_pipe_width*sewer_pipe_width  && 
 	        					((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 	        			}
 	        			else if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-	        				chunkdata.setBlock(x, y, z, Material.LEGACY_IRON_TRAPDOOR.getId(), (byte) 0x8 );
+	        				chunkdata.setBlock(x, y, z, LEGACY_IRON_TRAPDOOR);
 	        			}
 	    			}
 	    			
 	    			//upward
 	    			if(y>sewer_pipe_height  &&  y<=plugin.GROUND_LEVEL+1  &&  rt==CyberWorldObjectGenerator.DIR_INTERSECTION){
 	    				if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 	        			}
 	    			}
 		        	
@@ -1123,13 +1099,13 @@ public class CyberWorldObjectGenerator{
 	    			if(rt==CyberWorldObjectGenerator.DIR_BUILDING){
             			if(z>=0+cave_shift  &&  z<=cave_width+cave_shift){
             				if( ((y-(cave_height))* (y-(cave_height)) + (z-7.5)*(z-7.5))<  (cave_width)*(cave_width)){
-    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);	
+    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
             				}
             			}
     				
             			if(x>=0+cave_shift  &&  x<=cave_width+cave_shift){
 	        				if( ((y-(cave_height))* (y-(cave_height)) + (x-7.5)*(x-7.5))<  (cave_width)*(cave_width)){
-	        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);	
+	        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 	        				}
             			}
 	    			}			
@@ -1146,7 +1122,7 @@ public class CyberWorldObjectGenerator{
 	    				if((y>=5  &&  y<plugin.GROUND_LEVEL+1)  &&  ( (x<=0  ||  x>=15)  ||  (z<=0  ||  z>=15) )){
 	    					double d = rng.nextDouble();
 	    					if((x==0 || x==15) && (z==0  ||  z==15)  &&  d>=0.2){
-	    						chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+	    						chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 	    					}
 	    				}
 	    			}
@@ -1160,7 +1136,7 @@ public class CyberWorldObjectGenerator{
 	    			if(d>=0.5){
 	    				for(int y=0;y<plugin.GROUND_LEVEL+1;y++){
 	    					if((y>=5  &&  y<plugin.GROUND_LEVEL+1)  &&  ( (x<=0  ||  x>=15)  ||  (z<=0  ||  z>=15) )){
-	    						chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+	    						chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 	    					}
 	    				}
     				}
@@ -1180,8 +1156,8 @@ public class CyberWorldObjectGenerator{
     		int road_y_middle = plugin.LAYER_HEIGHT[level]+road_tube_width/2;
     		int road_tube_thick = 1;
     		int rtl = cg.getHighwayType(chkx,chkz,level);
-    	    //HIGHWAY_TUBES_MATERIAL = new MaterialData(Material.LEGACY_STAINED_GLASS.getId(), (byte)(Math.abs(chkx+chkz)%16)  );
-    	    HIGHWAY_TUBES_MATERIAL = new MaterialData(Material.LEGACY_GLASS.getId()  );
+    	    //HIGHWAY_TUBES_MATERIAL = new MaterialData(Material.LEGACY_STAINED_GLASS, (byte)(Math.abs(chkx+chkz)%16)  );
+    	    HIGHWAY_TUBES_MATERIAL = new MaterialData(LEGACY_GLASS  );
     	    
     	    
 			boolean EW_tunnel = false;
@@ -1193,9 +1169,9 @@ public class CyberWorldObjectGenerator{
     	    			//Road & tube checking
         				if(y >=plugin.LAYER_HEIGHT[level]-1 && y<plugin.LAYER_HEIGHT[level]+road_tube_width*2){
         					if(rtl==CyberWorldObjectGenerator.DIR_EAST_WEST ){
-              	    			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+              	    			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
         							if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-        								chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+        								chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
         								if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)      ){
         									EW_tunnel = true;
         								}
@@ -1208,9 +1184,9 @@ public class CyberWorldObjectGenerator{
               	    		}
               	    		else if(rtl==CyberWorldObjectGenerator.DIR_NORTH_SOUTH ){
               	    			
-              	    			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+              	    			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
         							if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-        								chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+        								chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
         								if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)  ){
         									NS_tunnel = true;
         								}
@@ -1222,15 +1198,15 @@ public class CyberWorldObjectGenerator{
             					}
               	    		}
               	    		else if(rtl==CyberWorldObjectGenerator.DIR_INTERSECTION ){
-              	    			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+              	    			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
               	    				if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-              	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+              	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
               	    					if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)  ){
               	    						IT_tunnel = true;
         								}
         							}
               	    				if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-              	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+              	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
               	    					if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)      ){
               	    						IT_tunnel = true;
         								}
@@ -1296,13 +1272,13 @@ public class CyberWorldObjectGenerator{
       	    			}
       	    			else if(IT_tunnel){
       	    				if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-      	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+      	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
       	    					if(((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)  ){
     								chunkdata.setRegion(x,y,z,x+1,y+1,z+1,HIGHWAY_TUBES_MATERIAL);
 								}
 							}
       	    				if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))<road_tube_width*road_tube_width){
-      	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+      	    					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
       	    					if(((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))>=(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)      ){
     								chunkdata.setRegion(x,y,z,x+1,y+1,z+1,HIGHWAY_TUBES_MATERIAL);
 								}
@@ -1310,10 +1286,10 @@ public class CyberWorldObjectGenerator{
       	    				//Remove 4 walls on intersection
       	    				
     	        			if(y>=road_y_middle  &&  ((x-7.5)*(x-7.5)+(y-road_y_middle)*(y-road_y_middle))<(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)){
-    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
     	        			}
     	        			if(y>=road_y_middle  &&  ((z-7.5)*(z-7.5)+(y-road_y_middle)*(y-road_y_middle))<(road_tube_width-road_tube_thick)*(road_tube_width-road_tube_thick)){
-    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+    	        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
     	        			}
           	    			if( ((x>=LAYER_SRT[level]  &&  x<=LAYER_END[level])  ||  (z>=LAYER_SRT[level]  &&  z<=LAYER_END[level]))  &&  y<plugin.LAYER_HEIGHT[level]+2){
         						chunkdata.setRegion(x,y,z,x+1,y+1,z+1,HIGHWAY_MATERIAL);
@@ -1377,9 +1353,10 @@ public class CyberWorldObjectGenerator{
     		    		int k=y-plugin.LAYER_HEIGHT[level];
     	    			for(int x=0;x<highway_struct_width;x++){
     	    	    		for(int z=0;z<highway_struct_length;z++){
-    	    	    			int block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
+    	    	    			Material block_id;
+    	    	    			block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
     	    				    byte block_data = biome_cc_list_highway.get(biome_number).get(0).getBlockData(x,k,z);
-    	    				    if(block_id!=Material.LEGACY_AIR.getId())
+    	    				    if(block_id!= LEGACY_AIR)
     	    				    	chunkdata.setBlock(x, y-3, z,new MaterialData(block_id, block_data));
     	    	    		}
         	    		}
@@ -1397,9 +1374,10 @@ public class CyberWorldObjectGenerator{
     		    		int k=y-plugin.LAYER_HEIGHT[level];
     	    			for(int x=0;x<highway_struct_width;x++){
     	    	    		for(int z=0;z<highway_struct_length;z++){
-    	    	    			int block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
+								Material block_id;
+    	    	    			block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
     	    				    byte block_data = biome_cc_list_highway.get(biome_number).get(0).getBlockData(x,k,z);
-    	    				   if(block_id!=Material.LEGACY_AIR.getId())
+    	    				   if(block_id!= LEGACY_AIR)
     	    				    	chunkdata.setBlock(x, y-3, z,new MaterialData(block_id, block_data));
     	    	    		}
         	    		}
@@ -1417,9 +1395,10 @@ public class CyberWorldObjectGenerator{
     		    		int k=y-plugin.LAYER_HEIGHT[level];
     	    			for(int x=0;x<highway_struct_width;x++){
     	    	    		for(int z=0;z<highway_struct_length;z++){
-    	    	    			int block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
+								Material block_id;
+    	    	    			block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
     	    				    byte block_data = biome_cc_list_highway.get(biome_number).get(0).getBlockData(x,k,z);
-    	    				   if(block_id!=Material.LEGACY_AIR.getId())
+    	    				   if(block_id!= LEGACY_AIR)
     	    				    	chunkdata.setBlock(x, y-3, z,new MaterialData(block_id, block_data));
     	    	    		}
         	    		}
@@ -1436,9 +1415,10 @@ public class CyberWorldObjectGenerator{
     		    		int k=y-plugin.LAYER_HEIGHT[level];
     	    			for(int x=0;x<highway_struct_width;x++){
     	    	    		for(int z=0;z<highway_struct_length;z++){
-    	    	    			int block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
+								Material block_id;
+    	    	    			block_id = biome_cc_list_highway.get(biome_number).get(0).getBlockId(x,k,z);
     	    				    byte block_data = biome_cc_list_highway.get(biome_number).get(0).getBlockData(x,k,z);
-    	    				    if(block_id!=Material.LEGACY_AIR.getId())
+    	    				    if(block_id!= LEGACY_AIR)
     	    				    	chunkdata.setBlock(x, y-3, z,new MaterialData(block_id, block_data));
     	    	    		}
         	    		}
@@ -1491,7 +1471,8 @@ public class CyberWorldObjectGenerator{
 						int type = cg.getBuildingType(chkx,chkz,layer)%current_list.size();
 						
 						long chunk_seed = cg.getBuildingSeed(chkx, chkz, layer);
-						int block_id  = Material.LEGACY_AIR.getId();
+						Material block_id;
+						block_id  = LEGACY_AIR;
 						byte block_data  = 0;
 						
 						boolean[][][] fillingAirIndeces ;
@@ -1554,25 +1535,25 @@ public class CyberWorldObjectGenerator{
 		    					for(int j=j_start;j<j_end;j++){
 		    						int x = j-j_start;
 		    						int z = i-i_start;
-				    				
+
 				    				block_id = current_list.get(type).getBlockId(expended_idx_i[i],expended_idx_k[k],expended_idx_j[j]);
 				            		block_data = current_list.get(type).getBlockData(expended_idx_i[i],expended_idx_k[k],expended_idx_j[j]);
 				            		
 			    					//replacing illegal block, and light blocks
 				            		boolean isLightSource=false;
-				    				if(block_id!=Material.LEGACY_AIR.getId()){
+				    				if(block_id!= LEGACY_AIR){
 			    						if((x%8==4  &&  z%8==4)  &&  y%8 ==0){
 				    						switch(layer){
 			    							case 0: 
-			    								block_id = Material.LEGACY_JACK_O_LANTERN.getId();
+			    								block_id = LEGACY_JACK_O_LANTERN;
 			    								isLightSource=true;
 			    								break;
 			    							case 1: 
-			    								block_id = Material.LEGACY_GLOWSTONE.getId();
+			    								block_id = LEGACY_GLOWSTONE;
 			    								isLightSource=true;
 			    								break;
 			    							case 2: 
-			    								block_id = Material.LEGACY_SEA_LANTERN.getId();
+			    								block_id = LEGACY_SEA_LANTERN;
 			    								isLightSource=true;
 			    								break;
 			    							}
@@ -1581,12 +1562,13 @@ public class CyberWorldObjectGenerator{
 				    				
 				    				//clearing overlapping area
 				    				if(fillingAirIndeces[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]]){
-				    					chunkdata.setBlock(x, y, z,Material.LEGACY_AIR);
+				    					chunkdata.setBlock(x, y, z, LEGACY_AIR);
 				    				}
 				    				
 				    				//pasting blocks
-				    				if(block_id!=Material.LEGACY_AIR.getId()  &&  ( !only_shell || frameIndeces[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]]  )){
-				    					int fixed_id = fixBannedBlock(block_id);
+				    				if(block_id!= LEGACY_AIR  &&  ( !only_shell || frameIndeces[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]]  )){
+										Material fixed_id;
+				    					fixed_id = fixBannedBlock(block_id);
 				    					if(fixed_id == block_id  &&  isLightSource==false){
 				    						chunkdata.setBlock(x, y, z, getReplacedMaterial(bm_rng,block_id,block_data,chunk_seed ));
 				    					}
@@ -1598,12 +1580,12 @@ public class CyberWorldObjectGenerator{
 				    				} 
 				    				
 			    					//add signs
-				    				int sign_block = sign_area[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]][0];
+									int sign_block = sign_area[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]][0];
 				    				byte content_data = (byte)sign_area[expended_idx_i[i]][expended_idx_j[j]][expended_idx_k[k]][1];
-				    				if(sign_block==Material.LEGACY_WOOL.getId()){
+									if(sign_block==Material.LEGACY_WOOL.getId()){
 				    					chunkdata.setBlock(x, y, z,new MaterialData(sign_block, content_data ));
 				    				}
-				    				else if(sign_block!=Material.LEGACY_AIR.getId()){
+									else if(sign_block!=Material.LEGACY_AIR.getId()){
 				    					chunkdata.setBlock(x, y, z,new MaterialData(sign_block ));
 				    				}
 				    				
@@ -1657,7 +1639,8 @@ public class CyberWorldObjectGenerator{
 						
 						
 						long chunk_seed = cg.getBuildingSeed(chkx, chkz, layer);
-						int block_id  = Material.LEGACY_AIR.getId();
+						Material block_id;
+						block_id  = LEGACY_AIR;
 						int block_data  = 0;
 						
 						boolean[][][] fillingAirIndeces ;
@@ -1691,19 +1674,19 @@ public class CyberWorldObjectGenerator{
 					            		
 				    					//replacing illegal block, and light blocks
 					            		boolean isLightSource=false;
-					    				if(block_id!=Material.LEGACY_AIR.getId()){
+					    				if(block_id!= LEGACY_AIR){
 				    						if((x%8==4  &&  z%8==4)  &&  y%8 ==0){
 					    						switch(layer){
 				    							case 0: 
-				    								block_id = Material.LEGACY_JACK_O_LANTERN.getId();
+				    								block_id = LEGACY_JACK_O_LANTERN;
 				    								isLightSource=true;
 				    								break;
 				    							case 1: 
-				    								block_id = Material.LEGACY_GLOWSTONE.getId();
+				    								block_id = LEGACY_GLOWSTONE;
 				    								isLightSource=true;
 				    								break;
 				    							case 2: 
-				    								block_id = Material.LEGACY_SEA_LANTERN.getId();
+				    								block_id = LEGACY_SEA_LANTERN;
 				    								isLightSource=true;
 				    								break;
 				    							}
@@ -1712,10 +1695,11 @@ public class CyberWorldObjectGenerator{
 					    				
 					    				//clearing overlapping area
 					    				if(fillingAirIndeces[i][j][k]){
-					    					chunkdata.setBlock(x, y, z,Material.LEGACY_AIR);
+					    					chunkdata.setBlock(x, y, z, LEGACY_AIR);
 					    				}
-					    				if(block_id!=Material.LEGACY_AIR.getId()){
-					    					int fixed_id = fixBannedBlock(block_id);
+					    				if(block_id!= LEGACY_AIR){
+											Material fixed_id;
+											fixed_id = fixBannedBlock(block_id);
 					    					if(fixed_id == block_id  &&  isLightSource==false){
 					    						chunkdata.setBlock(x, y, z, getReplacedMaterial(bm_rng,block_id,block_data,chunk_seed ));
 					    					}
@@ -1748,19 +1732,19 @@ public class CyberWorldObjectGenerator{
     	MaterialData sign_block_outer;
     	switch(ed_rng.nextInt(4)){
 		case 0:
-			sign_block_outer= new MaterialData(Material.LEGACY_STAINED_GLASS.getId(), sign_color );
+			sign_block_outer= new MaterialData(LEGACY_STAINED_GLASS, sign_color );
 			break;
 		case 1:
-			sign_block_outer= new MaterialData(Material.LEGACY_STAINED_GLASS_PANE.getId(), sign_color );
+			sign_block_outer= new MaterialData(LEGACY_STAINED_GLASS_PANE, sign_color );
 			break;
 		case 2:
-			sign_block_outer= new MaterialData(Material.LEGACY_SEA_LANTERN.getId() );
+			sign_block_outer= new MaterialData(LEGACY_SEA_LANTERN );
 			break;
 		case 3:
-			sign_block_outer= new MaterialData(Material.LEGACY_GLOWSTONE.getId() );
+			sign_block_outer= new MaterialData(LEGACY_GLOWSTONE );
 			break;
 		default:
-			sign_block_outer= new MaterialData(Material.LEGACY_AIR.getId() );
+			sign_block_outer= new MaterialData(LEGACY_AIR );
 			break;
     	}
     	return sign_block_outer;
@@ -1785,15 +1769,15 @@ public class CyberWorldObjectGenerator{
             		boolean has_blocks=false;
             		int last_idx = 12- rng.nextInt(plugin.GROUND_SIGN_BASE_HZ_SHIFT_MAX);
             		for(int x=15;x>=last_idx;x--){
-            			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
             				has_blocks = true;
             			}
             		}
             		//Sign object
             		for(int x=15;x>=last_idx;x--){
-            			if(chunkdata.getType(x, y, z)==Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)== LEGACY_AIR){
                 			chunkdata.setBlock(x, y, z,sign_material);
-                			chunkdata.setBlock(x, y-1, z,Material.LEGACY_IRON_FENCE);
+                			chunkdata.setBlock(x, y-1, z, LEGACY_IRON_FENCE);
             			}
             			else{
             				break;
@@ -1815,14 +1799,14 @@ public class CyberWorldObjectGenerator{
             		boolean has_blocks=false;
             		int last_idx = 4 + rng.nextInt(plugin.GROUND_SIGN_BASE_HZ_SHIFT_MAX);
             		for(int x=0;x<last_idx;x++){
-            			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
             				has_blocks = true;
             			}
             		}
         			for(int x=0;x<last_idx;x++){
-            			if(chunkdata.getType(x, y, z)==Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)== LEGACY_AIR){
                 			chunkdata.setBlock(x, y, z,sign_material);
-                			chunkdata.setBlock(x, y-1, z,Material.LEGACY_IRON_FENCE);
+                			chunkdata.setBlock(x, y-1, z, LEGACY_IRON_FENCE);
             			}
             			else{
             				break;
@@ -1847,7 +1831,7 @@ public class CyberWorldObjectGenerator{
             		int sign_length = ed_rng.nextInt(5);
             		int sign_height = ed_rng.nextInt(plugin.GROUND_SIGN_CONTENT_HEIGHT_MAX)+1;
             		byte sign_color = (byte)ed_rng.nextInt(16);
-            		MaterialData sign_block = new MaterialData(Material.LEGACY_WOOL.getId(), sign_color );
+            		MaterialData sign_block = new MaterialData(LEGACY_WOOL, sign_color );
             		for(int x=0;x<3+sign_length;x++){
             			chunkdata.setBlock(x, y, z,sign_material);
             			chunkdata.setRegion(x, y-sign_height, z,x+1,y,z+1,sign_block);
@@ -1874,7 +1858,7 @@ public class CyberWorldObjectGenerator{
             		int sign_length = ed_rng.nextInt(5);
             		int sign_height = ed_rng.nextInt(plugin.GROUND_SIGN_CONTENT_HEIGHT_MAX)+1;
             		byte sign_color = (byte)ed_rng.nextInt(16);
-            		MaterialData sign_block = new MaterialData(Material.LEGACY_WOOL.getId(), sign_color );
+            		MaterialData sign_block = new MaterialData(LEGACY_WOOL, sign_color );
             		for(int x=13-sign_length;x<16;x++){
             			chunkdata.setBlock(x, y, z,sign_material);
             			chunkdata.setRegion(x, y-sign_height, z,x+1,y,z+1,sign_block);
@@ -1901,14 +1885,14 @@ public class CyberWorldObjectGenerator{
             		boolean has_blocks=false;
             		int last_idx = 12- rng.nextInt(plugin.GROUND_SIGN_BASE_HZ_SHIFT_MAX);
             		for(int z=15;z>=last_idx;z--){
-            			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
             				has_blocks = true;
             			}
             		}
             		for(int z=15;z>=last_idx;z--){
-            			if(chunkdata.getType(x, y, z)==Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)== LEGACY_AIR){
                 			chunkdata.setBlock(x, y, z,sign_material);
-                			chunkdata.setBlock(x, y-1, z,Material.LEGACY_IRON_FENCE);
+                			chunkdata.setBlock(x, y-1, z, LEGACY_IRON_FENCE);
             			}
             			else{
             				break;
@@ -1930,15 +1914,15 @@ public class CyberWorldObjectGenerator{
             		boolean has_blocks=false;
             		int last_idx = 4 + rng.nextInt(plugin.GROUND_SIGN_BASE_HZ_SHIFT_MAX);
             		for(int z=0;z<last_idx;z++){
-            			if(chunkdata.getType(x, y, z)!=Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)!= LEGACY_AIR){
             				has_blocks = true;
             			}
             		}
             		
             		for(int z=0;z<last_idx;z++){
-            			if(chunkdata.getType(x, y, z)==Material.LEGACY_AIR){
+            			if(chunkdata.getType(x, y, z)== LEGACY_AIR){
                 			chunkdata.setBlock(x, y, z,sign_material);
-                			chunkdata.setBlock(x, y-1, z,Material.LEGACY_IRON_FENCE);
+                			chunkdata.setBlock(x, y-1, z, LEGACY_IRON_FENCE);
             			}
             			else{
             				break;
@@ -1963,7 +1947,7 @@ public class CyberWorldObjectGenerator{
             		int sign_length = ed_rng.nextInt(5);
             		int sign_height = ed_rng.nextInt(plugin.GROUND_SIGN_CONTENT_HEIGHT_MAX)+1;
             		byte sign_color = (byte)ed_rng.nextInt(16);
-            		MaterialData sign_block = new MaterialData(Material.LEGACY_WOOL.getId(), sign_color );
+            		MaterialData sign_block = new MaterialData(LEGACY_WOOL, sign_color );
             		for(int z=0;z<3+sign_length;z++){
             			chunkdata.setBlock(x, y, z,sign_material);
             			chunkdata.setRegion(x, y-sign_height, z,x+1,y,z+1,sign_block);
@@ -1990,7 +1974,7 @@ public class CyberWorldObjectGenerator{
             		int sign_length = ed_rng.nextInt(5);
             		int sign_height = ed_rng.nextInt(plugin.GROUND_SIGN_CONTENT_HEIGHT_MAX)+1;
             		byte sign_color = (byte)ed_rng.nextInt(16);
-            		MaterialData sign_block = new MaterialData(Material.LEGACY_WOOL.getId(), sign_color );
+            		MaterialData sign_block = new MaterialData(LEGACY_WOOL, sign_color );
             		for(int z=13-sign_length;z<16;z++){
             			chunkdata.setBlock(x, y, z,sign_material);
             			chunkdata.setRegion(x, y-sign_height, z,x+1,y,z+1,sign_block);
@@ -2032,8 +2016,9 @@ public class CyberWorldObjectGenerator{
 			
 			//replacing rng seed
 			long chunk_seed = cg.getBuildingSeed(chkx, chkz, 0);
-			
-			int block_id  = Material.LEGACY_AIR.getId();
+
+			Material block_id;
+			block_id = LEGACY_AIR;
 			int block_data =0;
 	
 			
@@ -2088,15 +2073,16 @@ public class CyberWorldObjectGenerator{
 	
 			            		
 			            		if(fillingAirIndeces[i][j][k]){
-			    					chunkdata.setBlock(x, y, z,Material.LEGACY_AIR);
+			    					chunkdata.setBlock(x, y, z, LEGACY_AIR);
 			    				}
 			            		
 			            		block_id = object.getBlockId(i,k,j);
 			            		block_data =  object.getBlockData(i,k,j);
 			            		
 			            		
-			            		if(block_id!=Material.LEGACY_AIR.getId()){
-			    					int fixed_id = fixBannedBlock(block_id);
+			            		if(block_id!= LEGACY_AIR){
+									Material fixed_id;
+									fixed_id = fixBannedBlock(block_id);
 			    					if(fixed_id == block_id){
 			    						chunkdata.setBlock(x, y, z, getReplacedMaterial(bm_rng,block_id,block_data,chunk_seed ));
 			    					}
@@ -2134,7 +2120,7 @@ public class CyberWorldObjectGenerator{
 		            		
 		            		
 		            		if(fillingAirIndeces[i][j][k]){
-		    					chunkdata.setBlock(x, y, z,Material.LEGACY_AIR);
+		    					chunkdata.setBlock(x, y, z, LEGACY_AIR);
 		    				}
 		            		//DEBUG
 
@@ -2144,8 +2130,9 @@ public class CyberWorldObjectGenerator{
 		            		block_data = object.getBlockId(i,k,j);
 		            		
 		            		
-		            		if(block_id!=Material.LEGACY_AIR.getId()){
-		    					int fixed_id = fixBannedBlock(block_id);
+		            		if(block_id!= LEGACY_AIR){
+								Material fixed_id;
+								fixed_id = fixBannedBlock(block_id);
 		    					if(fixed_id == block_id){
 		    						chunkdata.setBlock(x, y, z, getReplacedMaterial(bm_rng,block_id,block_data,chunk_seed ));
 		    					}
@@ -2175,16 +2162,16 @@ public class CyberWorldObjectGenerator{
 				double d = rng.nextDouble();
 				int y=2;
 				if ( d<0.2){
-    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
     			}
     			else if( d>=0.2  &&  d<0.27){
-    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
     			}
     			else if( d>=0.27  &&  d<0.3){
-    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
     			}
     			else if( d>=0.3 ){
-    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+    				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
     			}
 	            	
     			
@@ -2212,7 +2199,7 @@ public class CyberWorldObjectGenerator{
     					biomes.getBiome(x, z).equals(Biome.FROZEN_OCEAN)  ||
     					biomes.getBiome(x, z).equals(Biome.DEEP_OCEAN)){
         				
-        				ground = Material.LEGACY_CLAY;
+        				ground = LEGACY_CLAY;
         				height = (int) ((plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio)*0.5);
         				/*
         				switch(random.nextInt(3)){
@@ -2228,36 +2215,36 @@ public class CyberWorldObjectGenerator{
         				}*/
         				chunkdata.setRegion(x,height,z,x+1,height+1,z+1,ground);
         				
-	    				chunkdata.setRegion(x,3,z,x+1,height-3,z+1,Material.LEGACY_STONE);
-	        			chunkdata.setRegion(x,height-3,z,x+1,height,z+1,Material.LEGACY_DIRT);		
+	    				chunkdata.setRegion(x,3,z,x+1,height-3,z+1, LEGACY_STONE);
+	        			chunkdata.setRegion(x,height-3,z,x+1,height,z+1, LEGACY_DIRT);
 	        			
-		        		chunkdata.setRegion(x,height,z,x+1,plugin.SEA_LEVEL+1,z+1,Material.LEGACY_WATER);
+		        		chunkdata.setRegion(x,height,z,x+1,plugin.SEA_LEVEL+1,z+1, LEGACY_WATER);
 		        		
 	        			
         			}
         			else{
         				if(biomes.getBiome(x, z).equals(Biome.FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.BIRCH_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_BIRCH_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.JUNGLE)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			//Hills
@@ -2271,7 +2258,7 @@ public class CyberWorldObjectGenerator{
             					biomes.getBiome(x, z).equals(Biome.TAIGA_COLD_HILLS) ||
             					biomes.getBiome(x, z).equals(Biome.TAIGA_HILLS) ||
             					biomes.getBiome(x, z).equals(Biome.BIRCH_FOREST_HILLS) ){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(Math.round((height-plugin.SEA_LEVEL)*hillsRatio)));
             			}
             			//Exterme hills
@@ -2280,95 +2267,95 @@ public class CyberWorldObjectGenerator{
             					biomes.getBiome(x, z).equals(Biome.MUTATED_EXTREME_HILLS) ||
             					biomes.getBiome(x, z).equals(Biome.MUTATED_EXTREME_HILLS_WITH_TREES) ||
             					biomes.getBiome(x, z).equals(Biome.SMALLER_EXTREME_HILLS) ){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(Math.round((height-plugin.SEA_LEVEL)*exhillsRatio)));
             			}
             			//
             			
             			//Forest
             			else if(biomes.getBiome(x, z).equals(Biome.BIRCH_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_BIRCH_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.ROOFED_FOREST)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			//Plain
             			else if(biomes.getBiome(x, z).equals(Biome.PLAINS)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_PLAINS)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.SAVANNA)){
-            				ground = Material.LEGACY_GRASS;
+            				ground = LEGACY_GRASS;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			//Desert
             			else if(biomes.getBiome(x, z).equals(Biome.DESERT)){
-            				ground = Material.LEGACY_SAND;
+            				ground = LEGACY_SAND;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_DESERT)){
-            				ground = Material.LEGACY_SAND;
+            				ground = LEGACY_SAND;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			
             			//Swamp
             			else if(biomes.getBiome(x, z).equals(Biome.MUTATED_SWAMPLAND)){
-            				ground = Material.LEGACY_WATER;
+            				ground = LEGACY_WATER;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.SWAMPLAND)){
-            				ground = Material.LEGACY_WATER;
+            				ground = LEGACY_WATER;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			
             			else if(biomes.getBiome(x, z).equals(Biome.RIVER)){
-            				ground = Material.LEGACY_WATER;
+            				ground = LEGACY_WATER;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
-            				chunkdata.setRegion(x,(int) Math.round(height*0.95),z,x+1,height+1,z+1,Material.LEGACY_WATER);
+            				chunkdata.setRegion(x,(int) Math.round(height*0.95),z,x+1,height+1,z+1, LEGACY_WATER);
             				height*=0.95;
             			}
             			
             			//BEACHES
             			else if(biomes.getBiome(x, z).equals(Biome.BEACHES)){
-            				ground = Material.LEGACY_SAND;
+            				ground = LEGACY_SAND;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.COLD_BEACH)){
-            				ground = Material.LEGACY_SNOW_BLOCK;
+            				ground = LEGACY_SNOW_BLOCK;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			else if(biomes.getBiome(x, z).equals(Biome.STONE_BEACH)){
-            				ground = Material.LEGACY_STONE;
+            				ground = LEGACY_STONE;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			
             			//MESA
             			else if(biomes.getBiome(x, z).equals(Biome.MESA)){
-            				ground = Material.LEGACY_RED_SANDSTONE;
+            				ground = LEGACY_RED_SANDSTONE;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
             			
             			
             			else {
-            				ground = Material.LEGACY_CLAY;
+            				ground = LEGACY_CLAY;
             				height = (int) (plugin.SEA_LEVEL+Math.abs(height-plugin.SEA_LEVEL)/heightRevisedRatio);
             			}
-        				chunkdata.setRegion(x,3,z,x+1,height-3,z+1,Material.LEGACY_STONE);
-            			chunkdata.setRegion(x,height-3,z,x+1,height,z+1,Material.LEGACY_DIRT);		
+        				chunkdata.setRegion(x,3,z,x+1,height-3,z+1, LEGACY_STONE);
+            			chunkdata.setRegion(x,height-3,z,x+1,height,z+1, LEGACY_DIRT);
             			/*
         				switch(random.nextInt(3)){
 	        			case 0:
@@ -2434,48 +2421,48 @@ public class CyberWorldObjectGenerator{
 		        			//d = (d*Math.abs(z-7)/5);
 		        			//Ground 0 1 2 //sewer road// 13 14 15
 		        			if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		else if(ns == true &&  ew == false){ //ROAD
 		        			//d = (d*Math.abs(x-7)/5);
 		        			//Ground 0 1 2 //sewer road// 13 14 15
 		        			if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		else if (ns == true &&  ew == true){ //ROAD
 		        			//Ground 0 1 2 //sewer road// 13 14 15
 		        			d = Math.max((d*Math.abs(z-7)/5),(d*Math.abs(x-7)/5));
 		        			if(y==2  &&  d<0.2){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.2  &&  d<0.27){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(y==2  &&  d>=0.27  &&  d<0.3){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_OBSIDIAN);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_OBSIDIAN);
 		        			}
 		        			else if(y==2  &&  d>=0.3 ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		            	}
 		        		
@@ -2487,29 +2474,29 @@ public class CyberWorldObjectGenerator{
 		        					((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
 		        				
 		        				if(z==0  || z==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			else if((-1)*(y-sewer_pipe_height) == sewer_pipe_width-sewer_pipe_thick-1  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		        			else if(y>=3 &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 
 	    				}
@@ -2520,29 +2507,29 @@ public class CyberWorldObjectGenerator{
 		        					((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
 		        				
 		        				if(x==0  || x==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			else if((-1)*(y-sewer_pipe_height) == sewer_pipe_width-sewer_pipe_thick-1  &&  ((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		        			else if(y>=3 &&  ((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		        			
 		        			
@@ -2555,81 +2542,81 @@ public class CyberWorldObjectGenerator{
 		        					((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)) {
 		        				
 		        				if(z==0  || z==15  ||  x==0  ||  x ==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			
 		        			if(y>=3  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<sewer_pipe_width*sewer_pipe_width  && 
 		        					((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
 		        				if(z==0  || z==15  ||  x==0  ||  x ==15){
-		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_GLASS);
+		        					chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_GLASS);
 		        				}
 		        				else if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 		        			
 		        			
 		        			//Remove 4 walls on intersection
 		        			if(((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		        			if(((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);		        			
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		        			
 		        			//pipe water
 		        			if((-1)*(y-sewer_pipe_height) == sewer_pipe_width-sewer_pipe_thick-1  &&  ((z-7.5)*(z-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		        			if((-1)*(y-sewer_pipe_height) == sewer_pipe_width-sewer_pipe_thick-1  &&  ((x-7.5)*(x-7.5)+(y-sewer_pipe_height)*(y-sewer_pipe_height))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_WATER);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_WATER);
 		        			}
 		        			
 		        			//Downward foundation
 		        			if(y<=sewer_pipe_height-sewer_pipe_width  && ((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<sewer_pipe_width*sewer_pipe_width    ){
 		        				
 		        				if( d<0.02){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COAL_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COAL_ORE);
 			        			}
 		        				else if( d>=0.02  &&  d<0.04){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_ORE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_IRON_ORE);
 			        			}
 			        			else if( d>=0.04  &&  d<0.07){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_MOSSY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_MOSSY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.07  &&  d<=0.2){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 			        			}
 			        			else if( d>=0.2 ){
-			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_STONE);
+			        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_STONE);
 			        			}
 		        			}
 	    				}
@@ -2640,7 +2627,7 @@ public class CyberWorldObjectGenerator{
 		    			//Pipe Entry
 		    			if(y>sewer_pipe_height  &&  y<=21  &&  cg.getRoadType(chkx,chkz)==CyberWorldObjectGenerator.DIR_INTERSECTION){
 		    				if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_AIR);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_AIR);
 		        			}
 		    			}
 		    			
@@ -2648,11 +2635,11 @@ public class CyberWorldObjectGenerator{
 		    				//double d = rng.nextDouble();
 		        			if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<sewer_pipe_width*sewer_pipe_width  && 
 		        					((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))>=(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)      ){
-		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_COBBLESTONE);
+		        				chunkdata.setRegion(x,y,z,x+1,y+1,z+1, LEGACY_COBBLESTONE);
 		        			}
 		        			else if(((x-7.5)*(x-7.5)+(z-7.5)*(z-7.5))<(sewer_pipe_width-sewer_pipe_thick)*(sewer_pipe_width-sewer_pipe_thick)){
 		        				//chunkdata.setRegion(x,y,z,x+1,y+1,z+1,Material.LEGACY_IRON_TRAPDOOR);
-		        				chunkdata.setBlock(x, y, z, Material.LEGACY_IRON_TRAPDOOR.getId(), (byte) 0x8 );
+		        				chunkdata.setBlock(x, y, z, LEGACY_IRON_TRAPDOOR);
 		        			}
 		    			}
 		    			
@@ -2665,15 +2652,15 @@ public class CyberWorldObjectGenerator{
 	    return chunkdata;
    	
 	}
-	private MaterialData getReplacedMaterial(Random replace_rng, int id,int original_data_int,long seeds){
+	private MaterialData getReplacedMaterial(Random replace_rng, Material id,int original_data_int,long seeds){
 		byte original_data = (byte) original_data_int;
-		if(id==Material.LEGACY_GLASS.getId()  ||   
-				id==Material.LEGACY_THIN_GLASS.getId() ||  
-				id==Material.LEGACY_AIR.getId()){
+		if(id== LEGACY_GLASS  ||
+				id== LEGACY_THIN_GLASS ||
+				id== LEGACY_AIR){
 			return new MaterialData(id);
 		}
-		else if(id==Material.LEGACY_STAINED_GLASS.getId()  || 
-				id==Material.LEGACY_STAINED_GLASS_PANE.getId()){
+		else if(id== LEGACY_STAINED_GLASS  ||
+				id== LEGACY_STAINED_GLASS_PANE){
 			replace_rng.setSeed(seeds+id*17);
 			return new MaterialData(id,(byte)replace_rng.nextInt(16));
 		}
@@ -2693,17 +2680,17 @@ public class CyberWorldObjectGenerator{
 			return new MaterialData(FENCE_LIST[replace_rng.nextInt(FENCE_LIST.length)],original_data);
 		}
 		//Blocks
-		else if(this.contains(BLOCKS_LIST, id)  ||  id==Material.LEGACY_STAINED_CLAY.getId()  ||  id==Material.LEGACY_WOOL.getId() ){
+		else if(this.contains(BLOCKS_LIST, id)  ||  id== LEGACY_STAINED_CLAY  ||  id== LEGACY_WOOL ){
 			replace_rng.setSeed(seeds+id*17);
 			int all_block_idx = replace_rng.nextInt(BLOCKS_LIST.length+32);
 			
 			if(all_block_idx<16  &&  all_block_idx>=0){
 				replace_rng.setSeed(seeds+id*17);
-				return new MaterialData(Material.LEGACY_WOOL.getId(),(byte)replace_rng.nextInt(16));
+				return new MaterialData(LEGACY_WOOL,(byte)replace_rng.nextInt(16));
 			}
 			else if(all_block_idx<32  &&  all_block_idx>=16){
 				replace_rng.setSeed(seeds+id*17);
-				return new MaterialData(Material.LEGACY_STAINED_CLAY.getId(),(byte)replace_rng.nextInt(16));
+				return new MaterialData(LEGACY_STAINED_CLAY,(byte)replace_rng.nextInt(16));
 			}
 			else{
 				int new_block_idx = all_block_idx-32;
@@ -2762,7 +2749,7 @@ public class CyberWorldObjectGenerator{
 		for(int y=0;y<max_y_old;y++){
 			for(int x=0;x<max_x_old;x++){
 				for(int z=0;z<max_z_old;z++){
-					if(cc.getBlockId(x,y,z)!=Material.LEGACY_AIR.getId()){
+					if(cc.getBlockId(x,y,z)!= LEGACY_AIR){
 						area[x][z][y]=true;
 					}
 				}
@@ -2959,7 +2946,7 @@ public class CyberWorldObjectGenerator{
 		for(int y=0;y<max_y_old;y++){
 			for(int x=0;x<max_x_old;x++){
 				for(int z=0;z<max_z_old;z++){
-					if(cc.getBlockId(x,y,z)!=Material.LEGACY_AIR.getId()){
+					if(cc.getBlockId(x,y,z)!= LEGACY_AIR){
 						area[x][z][y]=true;
 					}
 				}
@@ -3315,7 +3302,7 @@ public class CyberWorldObjectGenerator{
 		for(int y=0;y<max_y_old;y++){
 			for(int x=0;x<max_x_old;x++){
 				for(int z=0;z<max_z_old;z++){
-					if(cc.getBlockId(x,y,z)!=Material.LEGACY_AIR.getId()){
+					if(cc.getBlockId(x,y,z)!= LEGACY_AIR){
 						area[x][z][y]=true;
 					}
 				}
@@ -3528,40 +3515,40 @@ public class CyberWorldObjectGenerator{
 		
 		
 	}
-	private int fixBannedBlock(int block_id){
-		if(block_id==Material.LEGACY_GOLD_BLOCK.getId()  || 
-				block_id==Material.LEGACY_GOLD_ORE.getId()  ||  
-				block_id==Material.LEGACY_DIAMOND_BLOCK.getId()  || 	
-				block_id==Material.LEGACY_DIAMOND_ORE.getId()  ||    
-				block_id==Material.LEGACY_IRON_BLOCK.getId()  ||    
-				block_id==Material.LEGACY_IRON_ORE.getId()  ||    
-				block_id==Material.LEGACY_COAL_BLOCK.getId()  ||      
-				block_id==Material.LEGACY_COAL_ORE.getId()  ||     
-				block_id==Material.LEGACY_LAPIS_BLOCK.getId()  ||   
-				block_id==Material.LEGACY_LAPIS_ORE.getId()  ||     
-				block_id==Material.LEGACY_EMERALD_BLOCK.getId()  || 
-				block_id==Material.LEGACY_EMERALD_ORE.getId()  || 
-				block_id==Material.LEGACY_BEDROCK.getId()  ||     
-				block_id==Material.LEGACY_BEACON.getId()  ||     
-				block_id==Material.LEGACY_TNT.getId()  ||         
-				block_id==Material.LEGACY_ICE.getId()  ||         
-				block_id==Material.LEGACY_FROSTED_ICE.getId()  ||         
-				block_id==Material.LEGACY_PACKED_ICE.getId()  ||      
-				block_id==Material.LEGACY_COMMAND.getId()  ||    
-				block_id==Material.LEGACY_COMMAND_CHAIN.getId()  ||    
-				block_id==Material.LEGACY_COMMAND_MINECART.getId()  ||    
-				block_id==Material.LEGACY_COMMAND_REPEATING.getId()  ||   
-				block_id==Material.LEGACY_REDSTONE_BLOCK.getId()  ||  
-				block_id==Material.LEGACY_REDSTONE_ORE.getId()  ||  
-				block_id==Material.LEGACY_GRASS.getId() ||
-				block_id==Material.LEGACY_LAVA.getId() ){
+	private Material fixBannedBlock(Material block_id){
+		if(block_id== LEGACY_GOLD_BLOCK  ||
+				block_id== LEGACY_GOLD_ORE  ||
+				block_id== LEGACY_DIAMOND_BLOCK  ||
+				block_id== LEGACY_DIAMOND_ORE  ||
+				block_id== LEGACY_IRON_BLOCK  ||
+				block_id== LEGACY_IRON_ORE  ||
+				block_id== LEGACY_COAL_BLOCK  ||
+				block_id== LEGACY_COAL_ORE  ||
+				block_id== LEGACY_LAPIS_BLOCK  ||
+				block_id== LEGACY_LAPIS_ORE  ||
+				block_id== LEGACY_EMERALD_BLOCK  ||
+				block_id== LEGACY_EMERALD_ORE  ||
+				block_id== LEGACY_BEDROCK  ||
+				block_id== LEGACY_BEACON  ||
+				block_id== LEGACY_TNT  ||
+				block_id== LEGACY_ICE  ||
+				block_id== LEGACY_FROSTED_ICE  ||
+				block_id== LEGACY_PACKED_ICE  ||
+				block_id== LEGACY_COMMAND  ||
+				block_id== LEGACY_COMMAND_CHAIN  ||
+				block_id== LEGACY_COMMAND_MINECART  ||
+				block_id== LEGACY_COMMAND_REPEATING  ||
+				block_id== LEGACY_REDSTONE_BLOCK  ||
+				block_id== LEGACY_REDSTONE_ORE  ||
+				block_id== LEGACY_GRASS ||
+				block_id== LEGACY_LAVA ){
 				
-				block_id = Material.LEGACY_COBBLESTONE.getId();
+				block_id = LEGACY_COBBLESTONE;
 		}
-		else if(block_id==Material.LEGACY_LEAVES.getId()  ||  
-				block_id==Material.LEGACY_LEAVES_2.getId() ){
+		else if(block_id== LEGACY_LEAVES  ||
+				block_id== LEGACY_LEAVES_2 ){
 				
-				block_id = Material.LEGACY_AIR.getId();
+				block_id = LEGACY_AIR;
 		}
 		return block_id;
 	}
