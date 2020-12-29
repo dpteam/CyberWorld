@@ -71,7 +71,7 @@ public class CyberWorldChunkGenerator extends ChunkGenerator{
             world.loadChunk(0, 0);
         }
 
-        if ((world.getHighestBlockYAt(0, 0) <= 0) && (world.getBlockAt(0, 0, 0).getType() == Material.AIR)) // SPACE!
+        if ((world.getHighestBlockYAt(0, 0) <= 0) && (world.getBlockAt(0, 0, 0).getType() == Material.LEGACY_AIR)) // SPACE!
         {
             return new Location(world, 0, 64, 0); // Lets allow people to drop a little before hitting the void then shall we?
         }

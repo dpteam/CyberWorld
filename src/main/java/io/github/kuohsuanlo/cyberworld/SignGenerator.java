@@ -109,19 +109,19 @@ public class SignGenerator {
 								int height_max = Math.min(j+height,point2y);
 								int width_max = Math.min(i+width,point2x);
 								
-								int frame_type = Material.GLOWSTONE.getId();
+								int frame_type = Material.LEGACY_GLOWSTONE.getId();
 								switch(rng.nextInt(4)){
 									case 0:
-										frame_type=Material.SEA_LANTERN.getId();
+										frame_type=Material.LEGACY_SEA_LANTERN.getId();
 										break;
 									case 1:
-										frame_type=Material.GLOWSTONE.getId();
+										frame_type=Material.LEGACY_GLOWSTONE.getId();
 										break;
 									case 2:
-										frame_type=Material.IRON_FENCE.getId();
+										frame_type=Material.LEGACY_IRON_FENCE.getId();
 										break;
 									case 3:
-										frame_type=Material.FENCE.getId();
+										frame_type=Material.LEGACY_FENCE.getId();
 										break;
 								}
 
@@ -137,7 +137,7 @@ public class SignGenerator {
 											
 										}
 										else{
-											merged[s1][s2][set_number]=Material.WOOL.getId();
+											merged[s1][s2][set_number]=Material.LEGACY_WOOL.getId();
 											content[s1][s2][set_number]=this.generateType(s1, s2, false);
 											
 										}
